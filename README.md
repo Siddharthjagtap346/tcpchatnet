@@ -134,7 +134,7 @@ The app is already deployed and live ✅
 
 ## 🙌 Credits
 
-Developed with ❤️ by **[Your Name]**  
+Developed with ❤️ by **[Siddharth Jagtap]**  
 If you liked this project, ⭐ it and consider contributing!
 
 ---
