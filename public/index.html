@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>💬 TCPChatNet Pro</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div id="login-screen">
+  <div id="ascii-logo">
+    <pre>
+████████╗ ██████╗ ██████╗      ██████╗██╗  ██╗ █████╗ ████████╗
+╚══██╔══╝██╔═══██╗██╔══██╗    ██╔════╝██║  ██║██╔══██╗╚══██╔══╝
+   ██║   ██║   ██║██████╔╝    ██║     ███████║███████║   ██║   
+   ██║   ██║   ██║██╔═══╝     ██║     ██╔══██║██╔══██║   ██║   
+   ██║   ╚██████╔╝██║         ╚██████╗██║  ██║██║  ██║   ██║   
+   ╚═╝    ╚═════╝ ╚═╝          ╚═════╝╚═╝  ╚═╝╚═╝  ╚═╝   ╚═╝   
+    </pre>
+  </div>
+
+  <h2>🚪 Join Chat</h2>
+  <input id="username-input" type="text" placeholder="Enter your name..." />
+  <button id="login-btn">Enter</button>
+</div>
+
+
+  <div class="container" id="chat-screen" style="display: none;">
+    <h1>💬 TCPChatNet Pro</h1>
+    <div id="chat-box"></div>
+    <div id="input-area">
+      <input id="msg-input" type="text" placeholder="Type a message..." autocomplete="off" />
+      <button id="send-btn" type="button">Send</button>
+    </div>
+  </div>
+
+  <script src="chat.js"></script>
+  <audio id="login-sound" src="login.wav" preload="auto"></audio>
+<audio id="msg-receive-sound" src="receive.wav" preload="auto"></audio>
+
+</body>
+</html>
