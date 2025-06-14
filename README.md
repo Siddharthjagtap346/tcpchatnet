@@ -15,10 +15,30 @@
 
 ## 🛠 Tech Stack
 
-| Frontend       | Backend               | Deployment |
-|----------------|------------------------|------------|
-| HTML, CSS, JS  | Python (`aiohttp`)     | Render     |
-| Vanilla JS     | WebSockets (`asyncio`) | GitHub     |
+| Frontend       | Backend               | Protocols           | Deployment |
+|----------------|------------------------|----------------------|------------|
+| HTML, CSS, JS  | Python (`aiohttp`)     | TCP/IP, WebSocket, HTTP | Render     |
+| Vanilla JS     | WebSockets (`asyncio`) |                      | GitHub     |
+
+---
+
+### 🔧 Architecture Overview
+
+```text
+┌────────────┐       HTTP       ┌──────────────┐
+│  Browser   │ ───────────────▶ │  Python App  │
+│  (Client)  │ ◀─────────────── │ (aiohttp)    │
+└────┬───────┘  WebSocket(TCP)  └────┬─────────┘
+     │                             │
+     ▼                             ▼
+User Input                Handles Events, Routes,
+ / UI / Chat             Serves Static Files, Chat Logic
+
+TCP/IP: Base transport for all networking
+
+HTTP: Serves frontend (HTML, CSS, JS)
+
+WebSocket: Real-time full-duplex chat over TCP
 
 ---
 
