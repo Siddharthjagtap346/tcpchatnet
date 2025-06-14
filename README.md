@@ -9,7 +9,15 @@
 ## 📸 Preview
 
 <!-- Replace with actual image URL -->
-![Chat UI Preview](https://your-image-url-if-any.com/preview.png)
+login page -
+![image](https://github.com/user-attachments/assets/eb82abd9-4485-4d76-b161-4779337b0daa)
+
+chat window- 
+![image](https://github.com/user-attachments/assets/ad460003-3b9f-4788-9deb-bcbf076ee54f)
+
+chatting -
+![image](https://github.com/user-attachments/assets/452f0356-3cb1-4bc1-8cd7-aef1958426df)
+
 
 ---
 
@@ -23,21 +31,7 @@
 ---
 
 ### 🔧 Architecture Overview
-text```
-┌────────────┐       HTTP       ┌──────────────┐
-│  Browser   │ ───────────────▶ │  Python App  │
-│  (Client)  │ ◀─────────────── │ (aiohttp)    │
-└────┬───────┘  WebSocket(TCP)  └────┬─────────┘
-     │                             │
-     ▼                             ▼
-User Input                Handles Events, Routes,
- / UI / Chat             Serves Static Files, Chat Logic```
-
-#### TCP/IP: Base transport for all networking
-
-#### HTTP: Serves frontend (HTML, CSS, JS)
-
-#### WebSocket: Real-time full-duplex chat over TCP 
+![ChatGPT Image Jun 14, 2025, 09_21_58 PM](https://github.com/user-attachments/assets/2c9c3a54-f7fc-411d-9d08-dce8fa84af63)
 
 ---
 
