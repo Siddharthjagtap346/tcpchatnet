@@ -55,9 +55,8 @@ tcpchatnet/
 
 ### 1. Clone the repository
 
-```bash
 git clone https://github.com/YOUR_USERNAME/tcpchatnet.git
-cd tcpchatnet```
+cd tcpchatnet
 
 ### 2. Install dependencies
 
@@ -74,10 +73,10 @@ Go to: http://localhost:3000
 Already deployed and live ✅
 Access: https://tcpchatnet.onrender.com
 
-Steps (in case you want to redeploy):
-Push code to GitHub
+### Steps (in case you want to redeploy):
+#### 1. Push code to GitHub
 
-Link your repo on Render
+#### 2. Link your repo on Render
 
 Use these settings:
 
@@ -89,7 +88,7 @@ Root Directory: Leave blank if server.py is in root
 
 Render detects and exposes both HTTP:3000 (site) and HTTP:6789 (WebSocket)
 
-⚙️ Environment & Notes
+#### ⚙️ Environment & Notes
 Works on any modern browser
 
 Default WebSocket port: 6789
@@ -97,6 +96,7 @@ Default WebSocket port: 6789
 Backend serves both frontend files and WebSocket handler
 
 chat_log.json stores up to 100 messages for persistence
+
 ---
 
 ## ✨ Future Enhancements
