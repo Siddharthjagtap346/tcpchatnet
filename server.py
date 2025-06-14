@@ -1,89 +1,104 @@
-import asyncio
-import websockets
+import os
 import json
+import asyncio
 from datetime import datetime
-from aiohttp import web  # ✅ Move to top
+from aiohttp import web
 
-connected_users = {}  # websocket: username
+connected_users = {}  # websocket -> username
+chat_history = []
+
 chat_log_file = "chat_log.json"
 
-# Load chat history
+# Load old chats
 try:
     with open(chat_log_file, "r") as f:
         chat_history = json.load(f)
 except (FileNotFoundError, json.JSONDecodeError):
     chat_history = []
 
+# Format message
 def format_message(user, text):
     return {
-        "time": datetime.now().strftime("%H:%M"),
+        "time": datetime.now().strftime("%I:%M:%S %p"),
         "user": user,
         "text": text
     }
 
+# Save to log file
 def save_to_log(msg):
     chat_history.append(msg)
     with open(chat_log_file, "w") as f:
         json.dump(chat_history[-100:], f)
 
-async def handler(websocket):
+# WebSocket Handler
+async def websocket_handler(request):
+    ws = web.WebSocketResponse()
+    await ws.prepare(request)
+
+    username = await ws.receive_str()
+
+    # Username conflict
+    if username in connected_users.values():
+        await ws.send_json(format_message("System", f"⚠️ Username '{username}' already connected."))
+        await ws.close()
+        return ws
+
+    connected_users[ws] = username
+
+    # Announce join
+    await broadcast(format_message("System", f"🟢 {username} joined the chat!"))
+
+    # Send old chat
+    for msg in chat_history:
+        await ws.send_json(msg)
+
+    # Online users
+    await broadcast(format_message("System", f"👥 Online: {', '.join(connected_users.values())}"))
+
     try:
-        username = await websocket.recv()
+        async for msg in ws:
+            text = msg.data.strip()
 
-        if username in connected_users.values():
-            await websocket.send(json.dumps(format_message("System", f"⚠️ '{username}' is already connected.")))
-            await websocket.close()
-            return
-
-        connected_users[websocket] = username
-        await notify_users(format_message("System", f"🟢 {username} joined the chat!"))
-
-        for msg in chat_history:
-            await websocket.send(json.dumps(msg))
-
-        await notify_users(format_message("System", f"👥 Online: {', '.join(connected_users.values())}"))
-
-        async for message in websocket:
-            msg_text = message.strip()
-
-            # 🧹 Only admin can clear chat
-            if msg_text == "/clear" and username == "admin":
+            if text == "/clear" and username == "admin":
                 chat_history.clear()
                 with open(chat_log_file, "w") as f:
                     json.dump([], f)
-                await notify_users(format_message("System", "🧹 Chat was cleared by admin."))
+                await broadcast(format_message("System", "🧹 Chat cleared by admin."))
                 continue
 
-            msg = format_message(username, msg_text)
-            print(f"[{username}]: {msg_text}")
-            save_to_log(msg)
-            await notify_users(msg)
+            chat_msg = format_message(username, text)
+            save_to_log(chat_msg)
+            await broadcast(chat_msg)
 
-    except websockets.exceptions.ConnectionClosed:
+    except Exception:
         pass
     finally:
-        left_user = connected_users.pop(websocket, "Unknown")
-        await notify_users(format_message("System", f"🔴 {left_user} left the chat."))
+        left = connected_users.pop(ws, "Unknown")
+        await broadcast(format_message("System", f"🔴 {left} left the chat."))
 
-async def notify_users(message):
-    if connected_users:
-        await asyncio.gather(*(ws.send(json.dumps(message)) for ws in connected_users))
+    return ws
 
-# ✅ Combined WebSocket + Frontend Server
-async def start_server():
-    # Serve static files
+# Broadcast message to all users
+async def broadcast(msg):
+    dead = []
+    for ws in connected_users:
+        try:
+            await ws.send_json(msg)
+        except:
+            dead.append(ws)
+
+    # Clean disconnected clients
+    for ws in dead:
+        connected_users.pop(ws, None)
+
+# Main app setup
+async def start_app():
     app = web.Application()
     app.router.add_static("/", path="public", show_index=True)
-    runner = web.AppRunner(app)
-    await runner.setup()
-    site = web.TCPSite(runner, "0.0.0.0", 3000)
-    await site.start()
+    app.router.add_get("/ws", websocket_handler)
+    return app
 
-    # Start WebSocket server
-    await websockets.serve(handler, "0.0.0.0", 6789)
-    print("✅ Server running at http://localhost:3000 and ws://localhost:6789")
-    await asyncio.Future()
-
-# ✅ Entry Point
+# Entrypoint
 if __name__ == "__main__":
-    asyncio.run(start_server())
+    port = int(os.environ.get("PORT", 3000))
+    web.run_app(start_app(), port=port)
