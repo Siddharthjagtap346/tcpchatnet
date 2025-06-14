@@ -79,7 +79,7 @@ function sendMessage() {
 
 function connect(name) {
   username = name;
-  ws = new WebSocket("ws://" + location.hostname + ":6789");
+  ws = new WebSocket("wss://tcpchatnet.onrender.com");
 
   ws.onopen = () => {
     ws.send(username);
