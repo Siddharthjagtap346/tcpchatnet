@@ -24,7 +24,6 @@
 
 ### 🔧 Architecture Overview
 
-```text
 ┌────────────┐       HTTP       ┌──────────────┐
 │  Browser   │ ───────────────▶ │  Python App  │
 │  (Client)  │ ◀─────────────── │ (aiohttp)    │
@@ -34,11 +33,11 @@
 User Input                Handles Events, Routes,
  / UI / Chat             Serves Static Files, Chat Logic
 
-TCP/IP: Base transport for all networking
+#### TCP/IP: Base transport for all networking
 
-HTTP: Serves frontend (HTML, CSS, JS)
+#### HTTP: Serves frontend (HTML, CSS, JS)
 
-WebSocket: Real-time full-duplex chat over TCP
+#### WebSocket: Real-time full-duplex chat over TCP 
 
 ---
 
