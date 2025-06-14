@@ -23,7 +23,7 @@
 ---
 
 ### 🔧 Architecture Overview
-
+text```
 ┌────────────┐       HTTP       ┌──────────────┐
 │  Browser   │ ───────────────▶ │  Python App  │
 │  (Client)  │ ◀─────────────── │ (aiohttp)    │
@@ -31,7 +31,7 @@
      │                             │
      ▼                             ▼
 User Input                Handles Events, Routes,
- / UI / Chat             Serves Static Files, Chat Logic
+ / UI / Chat             Serves Static Files, Chat Logic```
 
 #### TCP/IP: Base transport for all networking
 
